@@ -4,12 +4,14 @@ from rest_framework.viewsets import GenericViewSet
 from .serializers import WishlistSerializer, WishlistListSerializer
 from django.db import IntegrityError,transaction
 from django.shortcuts import get_object_or_404
+from .permissions import WishlistPermission
 
 class WishlistViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [WishlistPermission]
     def get_queryset(self):
         _user = self.request.user
-        return _user.service_wishlist_related.select_related().all()
+
+        return _user.service_wishlist_related.all()
     def get_serializer_class(self):
         if self.request.method == "GET":
             return WishlistListSerializer

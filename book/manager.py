@@ -14,12 +14,6 @@ class BookManager(models.Manager):
         qs.stock = qs.stock - 1
         qs.save()
 
-class AuthorManager(models.Manager):
-    pass
-
-
-class GenreManager(models.Manager):
-    pass
 
 
 

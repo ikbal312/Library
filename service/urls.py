@@ -1,4 +1,4 @@
-# from .views import Notificatiorouter.register('reservation',views.ReservationViewSet,basename='reservation')nView, ReminderView, ReservationView, BorrowView
+
 from .viewsets import WishlistViewSet
 from django.urls import path
 from rest_framework.routers import SimpleRouter

@@ -12,8 +12,8 @@ class BorrowAndReturn(models.Model):
     id = models.UUIDField(primary_key=True,
                           default=uuid.uuid4,
                           editable=False)
-    book = models.ForeignKey(to='book.Book', related_name='%(app_label)s_%(class)s_related', on_delete=models.DO_NOTHING)
-    user = models.ForeignKey(to='user.User', related_name='%(app_label)s_%(class)s_related', on_delete=models.DO_NOTHING)
+    book = models.ForeignKey(to='book.Book', related_name='%(app_label)s_%(class)s_related', on_delete=models.CASCADE)
+    user = models.ForeignKey(to='user.User', related_name='%(app_label)s_%(class)s_related', on_delete=models.CASCADE)
     borrowed_at = models.DateField(default=date.today, editable=False)
     duration = models.PositiveIntegerField(
         validators=[

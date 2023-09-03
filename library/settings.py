@@ -167,3 +167,5 @@ SWAGGER_SETTINGS = {
 REDOC_SETTINGS = {
    'LAZY_RENDERING': False,
 }
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

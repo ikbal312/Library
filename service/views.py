@@ -1,20 +1,17 @@
 from rest_framework import generics, exceptions, response, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from .serializers import BorrowSerializer, ReturnSerializer, NotificationSerializer, ReminderSerializer, \
     ReservationSerializer
 from django.db import transaction
-from .exceptions import InvalidBookStock
-
-from django.shortcuts import get_object_or_404
+from .permissions import ReservationPermisssion,NotificationPermission,BorrowPermission,ReminderPermission
 from .constants import RESERVATION, WISH
 from django.core.exceptions import ObjectDoesNotExist
 
 class BorrowView(generics.CreateAPIView):
     serializer_class = BorrowSerializer
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [BorrowPermission]
+    @transaction.atomic
     def perform_create(self, serializer):
         try:
             _user = self.request.user
@@ -36,7 +33,7 @@ return_view = ReturnView.as_view()
 
 class NotificationView(generics.ListAPIView):
     serializer_class = NotificationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [NotificationPermission]
 
     @transaction.atomic
     def get_queryset(self):
@@ -50,7 +47,7 @@ notification_view = NotificationView.as_view()
 
 class ReminderView(generics.ListAPIView):
     serializer_class = ReminderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [ReminderPermission]
 
     @transaction.atomic
     def get_queryset(self):
@@ -68,6 +65,7 @@ reminder_view = ReminderView.as_view()
 
 class ReservationView(generics.CreateAPIView):
     serializer_class = ReservationSerializer
+    permission_classes=[ReservationPermisssion]
 
     def get_queryset(self):
         return self.request.user.service_wishlist_related.select_related().all()

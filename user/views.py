@@ -1,10 +1,12 @@
+from django.shortcuts import get_object_or_404 as _get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .serializers import RegisterSerializer, LoginSerializer
-
-
+from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
+from .permissions import ProfilePermission
+from  .models import User
+from rest_framework import mixins
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
@@ -34,3 +36,17 @@ class RefreshTokenView(TokenRefreshView):
 refresh_token_view = RefreshTokenView.as_view()
 
 
+class ProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [ProfilePermission]
+    queryset = User.objects.all()
+
+
+    def get_object(self):
+        qs = self.get_queryset()
+        user = self.request.user
+        return _get_object_or_404(qs,email=user)
+
+    
+    
+profile_view = ProfileView.as_view()
